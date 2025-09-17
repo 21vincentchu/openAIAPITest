@@ -37,7 +37,6 @@ def chat_with_ai():
                     "version": "4"
                 },
                 input=user_input,
-                store=True
             ) as stream:
                 for event in stream:
                     if event.type == "response.output_text.delta":
@@ -49,6 +48,6 @@ def chat_with_ai():
         except Exception as e:
             print(f"Error: {e}")
             print("Please try again.")
-
+            
 if __name__ == "__main__":
     chat_with_ai()
