@@ -1,5 +1,6 @@
 from openai import OpenAI
 from dotenv import load_dotenv
+import time
 import os
 
 load_dotenv()
@@ -24,6 +25,7 @@ def chat_with_ai():
             continue
             
         try:
+            start = time.time()
             print("Generating Response... ", flush=True)
             
             # Stream the response
@@ -40,7 +42,9 @@ def chat_with_ai():
                 for event in stream:
                     if event.type == "response.output_text.delta":
                         print(event.delta, end="", flush=True)
-                print()  # New line after response
+                        end = time.time()
+                print(f"Total API Latency: {end-start:.3f} seconds")
+                print()
                 
         except Exception as e:
             print(f"Error: {e}")
