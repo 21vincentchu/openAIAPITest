@@ -17,7 +17,6 @@ def write_to_file(question,answer,latency):
         f.write(f"Answer: {answer}\n")
         f.write("-" * 80 + "\n\n")
     
-
 def chat_with_ai():
     print("AI Chat Session Started (type 'quit' or 'exit' to end)")
     print("-" * 50)
