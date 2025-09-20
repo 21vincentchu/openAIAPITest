@@ -11,7 +11,7 @@ client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 def write_to_file(question,answer,latency):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    with open("chat_history.txt", "a", encoding="utf-8") as f:
+    with open("chat_history_manual.txt", "a", encoding="utf-8") as f:
         f.write(f"[{timestamp}] Latency: {latency:.3f}s\n")
         f.write(f"Question: {question}\n")
         f.write(f"Answer: {answer}\n")
