@@ -17,20 +17,26 @@ def write_to_file(question, answer, latency):
         f.write(f"Answer: {answer}\n\n")
 
 def read_questions_in(fileName):
-    try:
-        with open(fileName, "r", encoding="utf-8") as f:
-            questions = [line.strip() for line in f.readlines() if line.strip()]
-        return questions
+    try: 
+        with open(fileName, "r", encoding="utf-8") as file:
+            
+            questions = []
+            for line in file.readlines():
+                if line.strip():
+                    questions.append(line.strip())
+            return questions
+                
     except Exception as e:
-        print(f"Error reading file: {e}")
+        print(f"error reading file: {e}")
         return []
-
+    
 def process_questions_from_file(filename):
     
     questions = read_questions_in(filename)
 
     # Process each question
     for i, question in enumerate(questions, 1):
+        
         print(f"\nProcessing question {i}/{len(questions)}")
         print(f"Question: {question}")
         
@@ -41,6 +47,7 @@ def process_questions_from_file(filename):
             # Stream the response and collect it
             response_text = ""
             print("AI: ", end="", flush=True)
+            
             with client.responses.stream(
                 model="gpt-5-nano",
                 prompt={
@@ -68,4 +75,5 @@ def process_questions_from_file(filename):
     
     print(f"\nCompleted processing all {len(questions)} questions!")
 if __name__ == "__main__":
-    process_questions_from_file("test_questions1.txt")
+    file_path = "/Users/vinnychu/Code/OpenAI/openAIAPITest/test_questions1.txt"
+    process_questions_from_file(file_path)
