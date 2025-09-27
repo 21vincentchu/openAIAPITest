@@ -52,7 +52,7 @@ def process_questions_from_file(filename):
                 model="gpt-5-mini",
                 prompt={
                     "id": "pmpt_68c33ff1d7a08196b83707127f95f9900d114a3e54143e10",
-                    "version": "6"
+                    "version": "9"
                 },
                 input=question,
             ) as stream:
