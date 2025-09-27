@@ -1,1 +1,3 @@
 what fumehood are we using in the cleanroom?
+What materials can be etched with RIE?
+What etch gases should I use for specific materials?

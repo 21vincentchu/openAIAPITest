@@ -49,10 +49,10 @@ def process_questions_from_file(filename):
             print("AI: ", end="", flush=True)
             
             with client.responses.stream(
-                model="gpt-5-nano",
+                model="gpt-5-mini",
                 prompt={
                     "id": "pmpt_68c33ff1d7a08196b83707127f95f9900d114a3e54143e10",
-                    "version": "4"
+                    "version": "6"
                 },
                 input=question,
             ) as stream:
