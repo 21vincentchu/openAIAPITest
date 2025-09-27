@@ -1,3 +1,10 @@
 what fumehood are we using in the cleanroom?
 What materials can be etched with RIE?
 What etch gases should I use for specific materials?
+what are the key parameters in a standard RIE process?
+How do I Determine etch rate?
+What are the safety precautions for oeprating an RIE system?
+how to etch small area on water using RIE system?
+How often should i clearn or maintain the chmaber?
+what causes non-uniform etching across the wafer?
+

@@ -1,4 +1,0 @@
-[2025-09-20 12:02:04] Latency: 9.466s
-Question: what fumehood are we using in the cleanroom?
-Answer: Supreme Air Series Fume Hood, Model HOM-1107 (Kewaunee Scientific Corporation).  
-
