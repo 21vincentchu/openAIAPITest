@@ -18,3 +18,12 @@
 - configure data pipelineing with unstructured
 - test the files for conversions
 - ensure the files are created into a new vector store
+
+### Setup
+- make an openAI platform account and grab an API key
+- make a .env file 
+- download requirements
+- NOTE: I developed on macOS with homebrew package manager, double check the prompt_file_app.py for some pathing issues
+- USE .gitignore 
+    - do NOT post our documents online, keep them offline
+    - do NOT post our API keys
