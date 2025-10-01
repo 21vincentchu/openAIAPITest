@@ -48,8 +48,6 @@ def process_doc_to_json(input_path: Path, output_path: Path):
     with output_path.open("w", encoding="utf-8") as f:
         json.dump(chunks_data, f, ensure_ascii=False, indent=2)
 
-
-
 def run_pipeline():
     """
     Process all documents in DOCS_DIR into JSON files under OUTPUT_DIR.
@@ -61,36 +59,6 @@ def run_pipeline():
             out_file = OUTPUT_DIR / f"{file.name}.json" 
             process_doc_to_json(file, out_file)          
             print(f"Processed {file.name} → {out_file}")
-
-def upload_to_vector_store():
-    '''
-    Uploads the processed JSON files to a new vectorstore in openAi
-    '''
-    
-    #create vector store
-    vector_store = client.vector_stores.create(name=VECTOR_STORE_NAME)
-    
-    #get processed JSON Files
-    files = [OUTPUT_DIR / f for f in os.listdir(OUTPUT_DIR) if f.endswith(".json")]
-    if not files:
-        print("No processed files found to upload.")
-        return
-    
-    #upload files
-    uploaded_files = []
-    for f in files:
-        print(f"Uploading {f.name} ...")
-        with open(f, "rb") as file_data:
-            upload = client.files.create(file=file_data, purpose="assistants")
-            uploaded_files.append(upload.id)
-
-    # Attach uploaded files to vector store
-    client.vector_stores.file_batches.create(
-        vector_store_id=vector_store.id,
-        file_ids=uploaded_files
-    )
-
-    print(f"Uploaded {len(uploaded_files)} files to vector store '{VECTOR_STORE_NAME}'")
     
 def upload_to_existing_vector_store():
     '''
