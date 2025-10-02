@@ -6,8 +6,9 @@
 - Testing accuracy of our calls
 
 ### Currently 
-- working with unstructured to parse through documents and turning into JSONL
-- Uploading to our OpenAI vector store
+= preprocessing documents into JSONL files for quick reads
+- have a .NPZ vector file
+- querying and responding < 3 seconds
 
 ### Future
 - Use LangChain
@@ -15,9 +16,9 @@
 - Use ChromaDB for vector storing
 
 ### To-Do's
-- configure data pipelineing with unstructured
-- test the files for conversions
-- ensure the files are created into a new vector store
+- implement chromaDB
+- configure embeddings and rerankings for chromaDB
+- Create documentation
 
 ### Setup
 - make an openAI platform account and grab an API key
