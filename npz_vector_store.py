@@ -8,6 +8,7 @@ from pathlib import Path
 from openai import OpenAI
 from dotenv import load_dotenv
 from typing import List, Dict, Tuple
+from datetime import datetime
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -80,36 +81,52 @@ def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
     return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
 
+# Cache for vector store data
+_vector_store_cache = None
+
 def search_vector_store(query: str, top_k: int = TOP_K) -> List[Tuple[str, Dict, float]]:
     """
     Search the NPZ vector store for relevant documents.
     Returns list of (text, metadata, similarity_score) tuples.
     """
+    global _vector_store_cache
+
     if not NPZ_FILE.exists():
         raise FileNotFoundError(f"Vector store not found: {NPZ_FILE}")
 
-    # Load vector store
-    data = np.load(NPZ_FILE, allow_pickle=True)
-    embeddings = data["embeddings"]
-    texts = data["texts"]
-    metadata = json.loads(str(data["metadata"]))
+    # Load vector store (with caching)
+    if _vector_store_cache is None:
+        data = np.load(NPZ_FILE, allow_pickle=True)
+        _vector_store_cache = {
+            "embeddings": data["embeddings"],
+            "texts": data["texts"],
+            "metadata": json.loads(str(data["metadata"]))
+        }
+
+    embeddings = _vector_store_cache["embeddings"]
+    texts = _vector_store_cache["texts"]
+    metadata = _vector_store_cache["metadata"]
 
     # Get query embedding
     query_embedding = get_embedding(query)
 
-    # Calculate similarities
-    similarities = []
-    for i, emb in enumerate(embeddings):
-        sim = cosine_similarity(query_embedding, emb)
-        similarities.append((i, sim))
+    # Vectorized cosine similarity calculation
+    # Normalize query embedding
+    query_norm = query_embedding / np.linalg.norm(query_embedding)
 
-    # Sort by similarity (descending)
-    similarities.sort(key=lambda x: x[1], reverse=True)
+    # Normalize all embeddings
+    embeddings_norm = embeddings / np.linalg.norm(embeddings, axis=1, keepdims=True)
+
+    # Calculate all similarities at once
+    similarities = np.dot(embeddings_norm, query_norm)
+
+    # Get top k indices
+    top_indices = np.argsort(similarities)[::-1][:top_k]
 
     # Return top k results
     results = []
-    for idx, score in similarities[:top_k]:
-        results.append((texts[idx], metadata[idx], score))
+    for idx in top_indices:
+        results.append((texts[idx], metadata[idx], float(similarities[idx])))
 
     return results
 
@@ -123,30 +140,27 @@ def query_with_context(question: str) -> tuple[str, float]:
     import time
     start_time = time.time()
 
-    # Get relevant context - increase to top 8 for better coverage
-    results = search_vector_store(question, top_k=8)
+    # Get relevant context
+    results = search_vector_store(question, top_k=5)
 
     print(f"Found {len(results)} relevant chunks:")
     for i, (text, meta, score) in enumerate(results, 1):
         print(f"  {i}. {meta['filename']} (similarity: {score:.3f})")
 
-    # Build context from results - include source filenames
-    context_parts = []
-    for text, meta, _ in results:
-        context_parts.append(f"[From: {meta['filename']}]\n{text}")
-    context = "\n\n---\n\n".join(context_parts)
+    # Build context from results - simplified
+    context = "\n\n".join([text for text, _, _ in results])
 
     # Simplified prompt
-    prompt = f"Context:\n{context}\n\nQuestion: {question}\n\nProvide a direct answer using EXACTLY 1-2 sentences. Do not exceed 2 sentences."
+    prompt = f"Context:\n{context}\n\nQuestion: {question}\n\nAnswer in 1-2 sentences."
 
     # Get response from OpenAI - using gpt-4o-mini for speed
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You must answer in exactly 1-2 sentences. Never write more than 2 sentences."},
+            {"role": "system", "content": "Answer concisely in 1-2 sentences."},
             {"role": "user", "content": prompt}
         ],
-        temperature=0.2
+        temperature=0.3
     )
 
     latency = time.time() - start_time
@@ -169,12 +183,22 @@ if __name__ == "__main__":
             print(f"Found {len(questions)} questions\n")
             print("=" * 80)
 
-            for i, question in enumerate(questions, 1):
-                print(f"\nQuestion {i}/{len(questions)}: {question}")
-                answer, latency = query_with_context(question)
-                print(f"\nAnswer: {answer}")
-                print(f"Latency: {latency:.3f}s")
-                print("=" * 80)
+            # Open log file for writing
+            log_file = "npz_query_results.txt"
+            with open(log_file, 'w', encoding='utf-8') as log:
+                log.write(f"Question\tAnswer\tLatency (s)\n")
+
+                for i, question in enumerate(questions, 1):
+                    print(f"\nQuestion {i}/{len(questions)}: {question}")
+                    answer, latency = query_with_context(question)
+                    print(f"\nAnswer: {answer}")
+                    print(f"Latency: {latency:.3f}s")
+                    print("=" * 80)
+
+                    # Write to log file (tab-separated for easy spreadsheet import)
+                    log.write(f"{question}\t{answer}\t{latency:.3f}\n")
+
+            print(f"\nResults saved to {log_file}")
         else:
             # Single question mode
             question = " ".join(sys.argv[1:])
