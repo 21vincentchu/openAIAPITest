@@ -20,33 +20,79 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 DOCS_DIR = Path("docs")
 OUTPUT_DIR = Path("processed")
 VECTOR_STORE_NAME = "processed_docs"
-CHUNK_SIZE = 800
-CHUNK_OVERLAP = 100
+CHUNK_SIZE = 1200
+CHUNK_OVERLAP = 200
+
+
+def extract_equipment_context(elements):
+    """
+    Extract equipment names, model numbers, and key context from document start.
+    Returns a context string to prepend to chunks.
+    """
+    # Get first few elements (title, intro paragraphs)
+    first_elements = elements[:5] if len(elements) >= 5 else elements
+    full_text = " ".join([elem.text for elem in first_elements if hasattr(elem, 'text')])
+
+    # Extract key patterns
+    context_parts = []
+
+    # Look for model numbers (e.g., "Model HOM-1107", "MA6BA6", "Oxford-80")
+    import re
+    model_patterns = [
+        r'Model\s+([A-Z0-9-]+)',
+        r'model\s+([A-Z0-9-]+)',
+        r'\b([A-Z]{2,}[-\s]?\d{2,}[A-Z0-9]*)\b'
+    ]
+
+    for pattern in model_patterns:
+        matches = re.findall(pattern, full_text)
+        if matches:
+            context_parts.extend([f"Model: {m}" for m in matches[:2]])
+            break
+
+    # Look for equipment types (Fume Hood, RIE, Hotplate, etc.)
+    equipment_keywords = [
+        'Fume Hood', 'RIE', 'Reactive Ion Etching', 'Hotplate',
+        'Mask Aligner', 'Supreme Air', 'Plasmalab', 'Isotemp'
+    ]
+
+    for keyword in equipment_keywords:
+        if keyword.lower() in full_text.lower():
+            context_parts.append(f"Equipment: {keyword}")
+            break
+
+    if context_parts:
+        return " | ".join(context_parts) + "\n\n"
+    return ""
 
 
 def process_doc_to_json(input_path: Path, output_path: Path):
     """
-    Parse a document into JSON chunks with metadata for better RAG.
+    Parse a document into JSONL chunks with metadata for better RAG.
+    Uses domain-aware chunking with equipment context prepended.
     """
     elements = partition(filename=str(input_path))
+
+    # Extract equipment context from document
+    equipment_context = extract_equipment_context(elements)
+
     chunks = chunk_elements(elements, max_characters=CHUNK_SIZE, overlap=CHUNK_OVERLAP)
 
-    # Convert chunks to list of dictionaries
-    chunks_data = [
-        {
-            "text": chunk.text,
-            "metadata": {
-                "filename": input_path.name,
-                "type": chunk.category,
-                "page": getattr(chunk.metadata, "page_number", None),
-            },
-        }
-        for chunk in chunks
-    ]
-    
-    # Write as JSON
+    # Write as JSONL (one JSON object per line)
     with output_path.open("w", encoding="utf-8") as f:
-        json.dump(chunks_data, f, ensure_ascii=False, indent=2)
+        for chunk in chunks:
+            # Prepend equipment context to each chunk
+            chunk_text = equipment_context + chunk.text
+
+            chunk_data = {
+                "text": chunk_text,
+                "metadata": {
+                    "filename": input_path.name,
+                    "type": chunk.category,
+                    "page": getattr(chunk.metadata, "page_number", None),
+                },
+            }
+            f.write(json.dumps(chunk_data, ensure_ascii=False) + "\n")
 
 def run_pipeline():
     """
@@ -56,8 +102,8 @@ def run_pipeline():
 
     for file in DOCS_DIR.iterdir():
         if file.is_file():
-            out_file = OUTPUT_DIR / f"{file.name}.json" 
-            process_doc_to_json(file, out_file)          
+            out_file = OUTPUT_DIR / f"{file.name}.jsonl"
+            process_doc_to_json(file, out_file)
             print(f"Processed {file.name} → {out_file}")
     
 def upload_to_existing_vector_store():
@@ -81,8 +127,8 @@ def upload_to_existing_vector_store():
         
         print(f"Found existing vector store: {target_store.id}")
         
-        # Get processed JSON files
-        files = [OUTPUT_DIR / f for f in os.listdir(OUTPUT_DIR) if f.endswith(".json")]
+        # Get processed JSONL files
+        files = [OUTPUT_DIR / f for f in os.listdir(OUTPUT_DIR) if f.endswith(".jsonl")]
         if not files:
             print("No processed files found to upload.")
             return

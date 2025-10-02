@@ -15,17 +15,18 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 # CONFIG
 PROCESSED_DIR = Path("processed")
 NPZ_FILE = Path("vector_store.npz")
-EMBEDDING_MODEL = "text-embedding-3-small"
+EMBEDDING_MODEL = "text-embedding-3-large"
 TOP_K = 5  # Number of results to return
 
 
 def load_processed_documents() -> List[Dict]:
-    """Load all processed JSON documents."""
+    """Load all processed JSONL documents."""
     documents = []
-    for json_file in PROCESSED_DIR.glob("*.json"):
-        with open(json_file, "r", encoding="utf-8") as f:
-            chunks = json.load(f)
-            documents.extend(chunks)
+    for jsonl_file in PROCESSED_DIR.glob("*.jsonl"):
+        with open(jsonl_file, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    documents.append(json.loads(line))
     return documents
 
 
@@ -45,13 +46,6 @@ def create_vector_store():
     """
     print("Loading processed documents...")
     documents = load_processed_documents()
-
-    if not documents:
-        print("No documents found in processed/ directory")
-        return
-
-    print(f"Found {len(documents)} chunks")
-    print("Generating embeddings...")
 
     texts = []
     embeddings = []
@@ -79,8 +73,6 @@ def create_vector_store():
     )
 
     print(f"✓ Vector store created: {NPZ_FILE}")
-    print(f"  Shape: {embeddings_array.shape}")
-    print(f"  Size: {NPZ_FILE.stat().st_size / 1024:.2f} KB")
 
 
 def cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
@@ -125,38 +117,36 @@ def search_vector_store(query: str, top_k: int = TOP_K) -> List[Tuple[str, Dict,
 def query_with_context(question: str) -> tuple[str, float]:
     """
     Answer a question using the NPZ vector store for context.
-    Returns (answer, latency_in_seconds).
+    Returns (answer, total_latency_in_seconds).
+    Latency includes vector search + API call time.
     """
     import time
     start_time = time.time()
 
-    print(f"\nSearching vector store for: {question}")
-
-    # Get relevant context
-    results = search_vector_store(question)
+    # Get relevant context - increase to top 8 for better coverage
+    results = search_vector_store(question, top_k=8)
 
     print(f"Found {len(results)} relevant chunks:")
     for i, (text, meta, score) in enumerate(results, 1):
         print(f"  {i}. {meta['filename']} (similarity: {score:.3f})")
 
-    # Build context from results
-    context = "\n\n---\n\n".join([text for text, _, _ in results])
+    # Build context from results - include source filenames
+    context_parts = []
+    for text, meta, _ in results:
+        context_parts.append(f"[From: {meta['filename']}]\n{text}")
+    context = "\n\n---\n\n".join(context_parts)
 
-    # Create prompt with context
-    prompt = f"""Based on the context below, answer the question in 1-2 brief sentences.
+    # Simplified prompt
+    prompt = f"Context:\n{context}\n\nQuestion: {question}\n\nProvide a direct answer using EXACTLY 1-2 sentences. Do not exceed 2 sentences."
 
-Context:
-{context}
-
-Question: {question}"""
-
-    # Get response from OpenAI
+    # Get response from OpenAI - using gpt-4o-mini for speed
     response = client.chat.completions.create(
-        model="gpt-5-mini",
+        model="gpt-4o-mini",
         messages=[
-            {"role": "developer", "content": "You are a cleanroom lab assistant. Always answer in 1-2 sentences maximum. Be direct and concise."},
+            {"role": "system", "content": "You must answer in exactly 1-2 sentences. Never write more than 2 sentences."},
             {"role": "user", "content": prompt}
         ],
+        temperature=0.2
     )
 
     latency = time.time() - start_time
