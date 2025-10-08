@@ -7,4 +7,95 @@ What are the safety precautions for oeprating an RIE system?
 how to etch small area on water using RIE system?
 How often should i clearn or maintain the chmaber?
 what causes non-uniform etching across the wafer?
-
+What is the minimum distance that apparatus must be placed from the sash opening in the fume hood? Why is perchloric acid strictly prohibited in non-specialized fume hoods? What is the typical air containment velocity in the fume hood? Which baffle position is optimal for large hot plate use and what is its purpose? How tall should metal legs be for large equipment placed in the fume hood? What must be done to the exhaust fan during the 15-minute water wash procedure for perchloric acid hoods? How often should fume hood velocity be checked at minimum? What is the maximum wattage for light bulbs in the fume hood? What creates the low-pressure turbulent zone extending 4 inches into the fume hood interior?
+Why must large equipment in the fume hood be placed on 2-3 inch legs?
+What are the three baffle position configurations available and what is each used for?
+Where is the valve located for controlling the wash-down procedure in perchloric acid hoods?
+What should be checked during annual fume hood maintenance?
+What is the proper sash management protocol during fume hood operation?
+What type of etching system is RIE classified as?
+Which gases are typically used for etching silicon (Si)?
+How is the etch rate calculated in RIE?
+What are the key parameters in a standard RIE process?
+What are common causes of non-uniform etching in RIE?
+How often should the RIE chamber be cleaned?
+What should be done to etch only a small area on a wafer?
+What is the primary function of RF power in the plasma etching process?
+What materials can be etched with RIE?
+What etch gases should be used for etching SiO₂?
+What etch gases should be used for etching Si₃N₄?
+What safety precautions should be taken when operating an RIE system?
+What should be verified during RIE support room machine startup?
+What is critical to ensure during wafer loading in the RIE?
+What should be checked first when removing the wafer after etching?
+What is the proper shutdown sequence for the RIE front room machine?
+What wavelengths are available in the Karl Suss MA6/BA6 mask aligner?
+What is the maximum wafer thickness the mask aligner can handle?
+What should you do immediately if the exposure lamp explodes?
+What are the required utilities for operating the mask aligner including their pressure specifications?
+What happens if nitrogen fails for longer than 5 minutes in the mask aligner?
+What exposure methods are available on the MA6/BA6 mask aligner?
+What mask sizes are supported by the mask aligner?
+what wafer sizes can be used for top-side alignment?
+What safety precautions should be observed when operating the mask aligner
+what is the maximum spin speed for the standard CEE 200X spin coater?
+What is the maximum substrate size the CEE 200X can handle for round wafers?
+What material is the spin bowl made of and why?
+What is the required vacuum pressure for the spin coater?
+What is the exhaust requirement for the CEE 200X?
+What is the spin speed acceleration range for the CEE 200X?
+What is the purpose of the Live Update feature in the CEE 200X spin coater?
+What connectivity options are available for uploading and downloading process parameters?
+What are the voltage requirements for the CEE 200X?
+what maintenance is required for the spin coater?
+What is the field number for super widefield observation on the Provis AX70?
+What is the minimum fine focus adjustment increment for the Provis AX70?
+What illumination sources are available for incident light on the Provis AX70?
+What illumination source is used for transmitted light on the Provis AX70?
+What optical system does the Provis AX70 microscope use?
+What microscopic techniques are supported by the Provis AX70?
+What is the zoom magnification range of the Provis AX70?
+What applications is the Provis AX70 designed for?
+What should be done before calibrating the Pioneer balance?
+Where should balances be located for optimal performance?
+What models of Pioneer balances are available and what are their precision levels?
+What is the HOT TOP warning system and when does it activate?
+how should the Pioneer balance be cleaned and maintained?
+What is the maximum surface temperature for ceramic hotplates?
+What is the maximum surface temperature for aluminum hotplates?
+What is the stirring range for Isotemp hotplates?
+What is the stirring capacity range depending on the model?
+What safety features are included in Isotemp hotplates?
+What size options are available for Isotemp hotplates?
+What accessories are available for Isotemp hotplates?
+What is the first step before operating any new equipment in the laboratory?
+What PPE is required when handling chemicals or operating equipment?
+What should be done if equipment malfunctions or safety concerns arise?
+What are the general laboratory safety guidelines that must be followed?
+Where should emergency equipment be located and what should users know about it?
+What are the proper waste disposal procedures for laboratory materials?
+What training is required before operating specialized equipment?
+What is the model number of the Supreme Air Fume Hood used in the laboratory?
+Who is the manufacturer of the Provis AX70 microscope?
+What is the location of the Karl Suss MA6/BA6 mask aligner?
+What are the dimensions of the CEE 200X spin coater?
+What is the weight of the CEE 200X spin coater?
+Who should be contacted for fume hood maintenance and repairs?
+What is the laboratory manager's name and department affiliation?
+What is the primary function of the Supreme Air Series Fume Hood?
+What is the primary function of the RIE system?
+How does the protective air barrier in the fume hood work?
+What happens to air flow when horizontal sashes are removed from the fume hood?
+Why is the sash height limitation important in fume hood operation?
+What is the purpose of the baffle slots in the rear of the fume hood?
+How does RIE differ from wet chemical etching?
+What role does vacuum play in the RIE process?
+What is the significance of the recipe capacity in the CEE 200X spin coater?
+What is the purpose of programmable vacuum and nitrogen purge in spin coating?
+What is FISH (Fluorescence In Situ Hybridization) and how is the Provis AX70 used for it?
+Why is the UIS optical system advantageous in the Provis AX70?
+What is the purpose of the raised display on Isotemp hotplates?
+How does the automatic over-temperature protection work on hotplates?
+What is the Average Piece Weight (APW) used for in balance operations?
+Why must perchloric acid hoods be washed down after each use?
+What are the consequences of obstructing the slots in the rear baffle of the fume hood?

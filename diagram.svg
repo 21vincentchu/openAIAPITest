@@ -1,0 +1,185 @@
+<svg viewBox="0 0 1400 1000" xmlns="http://www.w3.org/2000/svg">
+  <!-- Define styles -->
+  <defs>
+    <style>
+      .component { fill: #e3f2fd; stroke: #1976d2; stroke-width: 2; }
+      .storage { fill: #fff3e0; stroke: #f57c00; stroke-width: 2; }
+      .api { fill: #f3e5f5; stroke: #7b1fa2; stroke-width: 2; }
+      .user { fill: #e8f5e9; stroke: #388e3c; stroke-width: 2; }
+      .phase-box { fill: none; stroke: #666; stroke-width: 2; stroke-dasharray: 5,5; }
+      .text { font-family: Arial, sans-serif; font-size: 13px; fill: #333; }
+      .text-small { font-family: Arial, sans-serif; font-size: 11px; fill: #555; }
+      .text-title { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #1565c0; }
+      .text-phase { font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #666; }
+      .arrow { fill: none; stroke: #333; stroke-width: 2; marker-end: url(#arrowhead); }
+      .arrow-data { fill: none; stroke: #d32f2f; stroke-width: 2; marker-end: url(#arrowhead-red); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#d32f2f" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="700" y="30" class="text-title" text-anchor="middle">RAG Document Query System Architecture</text>
+
+  <!-- Phase 1: Document Ingestion (Offline Process) -->
+  <rect x="50" y="60" width="650" height="420" class="phase-box" rx="10"/>
+  <text x="375" y="85" class="text-phase" text-anchor="middle">Document Pipeline Ingestion  (Offline Process)</text>
+
+  <!-- Document Sources -->
+  <rect x="80" y="110" width="140" height="70" class="storage" rx="5"/>
+  <text x="150" y="135" class="text" text-anchor="middle" font-weight="bold">Document Sources</text>
+  <text x="150" y="155" class="text-small" text-anchor="middle">PDF, DOCX files</text>
+  <text x="150" y="170" class="text-small" text-anchor="middle">/docs directory</text>
+
+  <!-- Unstructured Library -->
+  <rect x="270" y="110" width="140" height="70" class="component" rx="5"/>
+  <text x="340" y="135" class="text" text-anchor="middle" font-weight="bold">Unstructured</text>
+  <text x="340" y="150" class="text" text-anchor="middle" font-weight="bold">Library</text>
+  <text x="340" y="170" class="text-small" text-anchor="middle">Document Parser</text>
+
+  <!-- Processing Pipeline -->
+  <rect x="460" y="110" width="200" height="70" class="component" rx="5"/>
+  <text x="560" y="130" class="text" text-anchor="middle" font-weight="bold">Document Processing</text>
+  <text x="560" y="145" class="text" text-anchor="middle" font-weight="bold">Pipeline</text>
+  <text x="560" y="165" class="text-small" text-anchor="middle">Unstructured_data_pipeline.py</text>
+
+  <!-- Context Extraction Box -->
+  <rect x="80" y="220" width="240" height="80" class="component" rx="5" fill="#fff9c4" stroke="#f9a825"/>
+  <text x="200" y="240" class="text" text-anchor="middle" font-weight="bold">Equipment Context</text>
+  <text x="200" y="255" class="text" text-anchor="middle" font-weight="bold">Extraction</text>
+  <text x="200" y="275" class="text-small" text-anchor="middle">• Model numbers (HOM-1107)</text>
+  <text x="200" y="290" class="text-small" text-anchor="middle">• Equipment types (Fume Hood)</text>
+
+  <!-- Chunking Box -->
+  <rect x="360" y="220" width="300" height="80" class="component" rx="5"/>
+  <text x="510" y="240" class="text" text-anchor="middle" font-weight="bold">Chunking &amp; Context Prepending</text>
+  <text x="510" y="260" class="text-small" text-anchor="middle">• 1200 char chunks, 200 char overlap</text>
+  <text x="510" y="275" class="text-small" text-anchor="middle">• Prepend equipment context to chunks</text>
+  <text x="510" y="290" class="text-small" text-anchor="middle">• Add metadata (filename, type, page)</text>
+
+  <!-- JSONL Storage -->
+  <rect x="260" y="330" width="200" height="60" class="storage" rx="5"/>
+  <text x="360" y="355" class="text" text-anchor="middle" font-weight="bold">JSONL Storage</text>
+  <text x="360" y="375" class="text-small" text-anchor="middle">/processed directory</text>
+
+  <!-- OpenAI Embeddings API -->
+  <rect x="520" y="330" width="140" height="60" class="api" rx="5"/>
+  <text x="590" y="350" class="text" text-anchor="middle" font-weight="bold">OpenAI</text>
+  <text x="590" y="365" class="text" text-anchor="middle" font-weight="bold">Embeddings API</text>
+  <text x="590" y="380" class="text-small" text-anchor="middle">text-embedding-3-large</text>
+
+  <!-- ChromaDB -->
+  <rect x="260" y="410" width="200" height="60" class="storage" rx="5"/>
+  <text x="360" y="430" class="text" text-anchor="middle" font-weight="bold">ChromaDB</text>
+  <text x="360" y="445" class="text" text-anchor="middle" font-weight="bold">Vector Database</text>
+  <text x="360" y="460" class="text-small" text-anchor="middle">/chroma_db (persistent)</text>
+
+  <!-- Phase 2: Query & Retrieval (Real-time Process) -->
+  <rect x="750" y="60" width="600" height="560" class="phase-box" rx="10"/>
+  <text x="1050" y="85" class="text-phase" text-anchor="middle">Query &amp; Retrieval (Real-time Process)</text>
+
+  <!-- End User -->
+  <rect x="790" y="110" width="120" height="60" class="user" rx="5"/>
+  <text x="850" y="135" class="text" text-anchor="middle" font-weight="bold">End User</text>
+  <text x="850" y="155" class="text-small" text-anchor="middle">Submits Question</text>
+
+  <!-- Query Interface -->
+  <rect x="960" y="110" width="160" height="60" class="component" rx="5"/>
+  <text x="1040" y="130" class="text" text-anchor="middle" font-weight="bold">Query Interface</text>
+  <text x="1040" y="150" class="text-small" text-anchor="middle">chroma_vector_store.py</text>
+
+  <!-- Query Embedding -->
+  <rect x="1160" y="110" width="160" height="60" class="api" rx="5"/>
+  <text x="1240" y="130" class="text" text-anchor="middle" font-weight="bold">OpenAI API</text>
+  <text x="1240" y="145" class="text-small" text-anchor="middle">Generate Query</text>
+  <text x="1240" y="160" class="text-small" text-anchor="middle">Embedding</text>
+
+  <!-- Vector Search -->
+  <rect x="960" y="210" width="200" height="80" class="component" rx="5"/>
+  <text x="1060" y="235" class="text" text-anchor="middle" font-weight="bold">Similarity Search</text>
+  <text x="1060" y="255" class="text-small" text-anchor="middle">• Query ChromaDB with embedding</text>
+  <text x="1060" y="270" class="text-small" text-anchor="middle">• Top 5 similar chunks</text>
+  <text x="1060" y="285" class="text-small" text-anchor="middle">• L2 distance → similarity scores</text>
+
+  <!-- ChromaDB Reference (for query) -->
+  <rect x="790" y="210" width="140" height="80" class="storage" rx="5"/>
+  <text x="860" y="240" class="text" text-anchor="middle" font-weight="bold">ChromaDB</text>
+  <text x="860" y="255" class="text" text-anchor="middle" font-weight="bold">Vector Store</text>
+  <text x="860" y="275" class="text-small" text-anchor="middle">(Same as Phase 1)</text>
+
+  <!-- Context Construction -->
+  <rect x="960" y="320" width="200" height="70" class="component" rx="5"/>
+  <text x="1060" y="345" class="text" text-anchor="middle" font-weight="bold">Context Prompt</text>
+  <text x="1060" y="360" class="text" text-anchor="middle" font-weight="bold">Construction</text>
+  <text x="1060" y="380" class="text-small" text-anchor="middle">Chunks + Original Question</text>
+
+  <!-- OpenAI Chat API -->
+  <rect x="960" y="420" width="200" height="70" class="api" rx="5"/>
+  <text x="1060" y="445" class="text" text-anchor="middle" font-weight="bold">OpenAI Chat API</text>
+  <text x="1060" y="460" class="text-small" text-anchor="middle">gpt-4o-mini</text>
+  <text x="1060" y="475" class="text-small" text-anchor="middle">Generate concise answer</text>
+
+  <!-- Response Processing -->
+  <rect x="960" y="520" width="200" height="70" class="component" rx="5"/>
+  <text x="1060" y="545" class="text" text-anchor="middle" font-weight="bold">Response Processing</text>
+  <text x="1060" y="565" class="text-small" text-anchor="middle">• Format answer (1-2 sentences)</text>
+  <text x="1060" y="580" class="text-small" text-anchor="middle">• Add latency metrics</text>
+
+  <!-- Key Features Box -->
+  <rect x="50" y="650" width="1300" height="320" class="phase-box" rx="10" stroke="#2e7d32"/>
+  <text x="700" y="675" class="text-phase" text-anchor="middle" fill="#2e7d32">Key System Features</text>
+
+  <g transform="translate(100, 700)">
+    <text x="0" y="0" class="text" font-weight="bold">✓ Equipment Context Extraction</text>
+    <text x="20" y="20" class="text-small">Extracts model numbers and equipment types from headers for better retrieval accuracy</text>
+    
+    <text x="0" y="50" class="text" font-weight="bold">✓ Persistent Vector Storage</text>
+    <text x="20" y="70" class="text-small">ChromaDB maintains indexed embeddings—no reloading needed between sessions</text>
+    
+    <text x="0" y="100" class="text" font-weight="bold">✓ Batch Processing Pipeline</text>
+    <text x="20" y="120" class="text-small">Efficient document ingestion with parallel embedding generation</text>
+  </g>
+
+  <g transform="translate(750, 700)">
+    <text x="0" y="0" class="text" font-weight="bold">✓ Semantic Search</text>
+    <text x="20" y="20" class="text-small">L2 distance-based similarity matching for relevant chunk retrieval</text>
+    
+    <text x="0" y="50" class="text" font-weight="bold">✓ Context-Aware Responses</text>
+    <text x="20" y="70" class="text-small">LLM generates answers grounded in retrieved document chunks</text>
+    
+    <text x="0" y="100" class="text" font-weight="bold">✓ Performance Monitoring</text>
+    <text x="20" y="120" class="text-small">Built-in latency tracking for query and response time optimization</text>
+  </g>
+
+  <!-- Arrows for Phase 1 -->
+  <path d="M 220 145 L 270 145" class="arrow"/>
+  <path d="M 410 145 L 460 145" class="arrow"/>
+  <path d="M 340 180 L 340 220" class="arrow"/>
+  <path d="M 560 180 L 560 220" class="arrow"/>
+  <path d="M 320 260 L 360 260" class="arrow"/>
+  <path d="M 510 300 L 510 330" class="arrow"/>
+  <path d="M 460 360 L 520 360" class="arrow"/>
+  <path d="M 590 390 L 460 440" class="arrow"/>
+
+  <!-- Arrow from JSONL to ChromaDB -->
+  <path d="M 360 390 L 360 410" class="arrow-data"/>
+
+  <!-- Arrows for Phase 2 -->
+  <path d="M 910 140 L 960 140" class="arrow"/>
+  <path d="M 1120 140 L 1160 140" class="arrow"/>
+  <path d="M 1240 170 L 1060 210" class="arrow"/>
+  <path d="M 930 250 L 960 250" class="arrow-data"/>
+  <path d="M 1060 290 L 1060 320" class="arrow"/>
+  <path d="M 1060 390 L 1060 420" class="arrow"/>
+  <path d="M 1060 490 L 1060 520" class="arrow"/>
+  <path d="M 960 555 L 910 140" class="arrow"/>
+
+  <!-- Connection between phases -->
+  <path d="M 460 440 L 730 440 L 730 250 L 790 250" class="arrow-data" stroke-dasharray="5,5"/>
+  <text x="600" y="435" class="text-small" fill="#d32f2f">Shared Vector Store</text>
+
+</svg>

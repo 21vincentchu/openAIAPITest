@@ -5,7 +5,8 @@ This pipeline:
 1. Processes documents (PDF, DOCX, etc.) using Unstructured
 2. Chunks content with overlap for better RAG retrieval
 3. Extracts equipment context (model numbers, types) from document headers
-4. Uploads processed files to OpenAI vector store for semantic search
+4. Stores in ChromaDB vector database for semantic search
+   (OpenAI vector store upload function kept for legacy support)
 
 Configuration is managed via constants at module level.
 """
@@ -180,6 +181,12 @@ def upload_to_existing_vector_store():
 if __name__ == "__main__":
     run_pipeline()
     print("All documents processed into JSON format")
-    
-    upload_to_existing_vector_store()
-    print("Uploaded files to vector store")
+
+    # Use ChromaDB instead of OpenAI vector store
+    print("\nCreating ChromaDB vector store...")
+    from chroma_vector_store import create_vector_store
+    create_vector_store()
+
+    # Legacy OpenAI vector store upload (optional)
+    # upload_to_existing_vector_store()
+    # print("Uploaded files to vector store")
