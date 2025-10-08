@@ -1,13 +1,18 @@
-what fumehood are we using in the cleanroom?
+What fumehood are we using in the cleanroom?
 What materials can be etched with RIE?
 What etch gases should I use for specific materials?
-what are the key parameters in a standard RIE process?
+What are the key parameters in a standard RIE process?
 How do I Determine etch rate?
 What are the safety precautions for oeprating an RIE system?
 how to etch small area on water using RIE system?
 How often should i clearn or maintain the chmaber?
 what causes non-uniform etching across the wafer?
-What is the minimum distance that apparatus must be placed from the sash opening in the fume hood? Why is perchloric acid strictly prohibited in non-specialized fume hoods? What is the typical air containment velocity in the fume hood? Which baffle position is optimal for large hot plate use and what is its purpose? How tall should metal legs be for large equipment placed in the fume hood? What must be done to the exhaust fan during the 15-minute water wash procedure for perchloric acid hoods? How often should fume hood velocity be checked at minimum? What is the maximum wattage for light bulbs in the fume hood? What creates the low-pressure turbulent zone extending 4 inches into the fume hood interior?
+What is the minimum distance that apparatus must be placed from the sash opening in the fume hood? 
+Why is perchloric acid strictly prohibited in non-specialized fume hoods? 
+What is the typical air containment velocity in the fume hood? Which baffle position is optimal for large hot plate use and what is its purpose? 
+How tall should metal legs be for large equipment placed in the fume hood? What must be done to the exhaust fan during the 15-minute water wash procedure for perchloric acid hoods?
+How often should fume hood velocity be checked at minimum? What is the maximum wattage for light bulbs in the fume hood? 
+What creates the low-pressure turbulent zone extending 4 inches into the fume hood interior?
 Why must large equipment in the fume hood be placed on 2-3 inch legs?
 What are the three baffle position configurations available and what is each used for?
 Where is the valve located for controlling the wash-down procedure in perchloric acid hoods?

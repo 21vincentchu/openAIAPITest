@@ -109,7 +109,7 @@
   <rect x="790" y="210" width="140" height="80" class="storage" rx="5"/>
   <text x="860" y="240" class="text" text-anchor="middle" font-weight="bold">ChromaDB</text>
   <text x="860" y="255" class="text" text-anchor="middle" font-weight="bold">Vector Store</text>
-  <text x="860" y="275" class="text-small" text-anchor="middle">(Same as Phase 1)</text>
+  <text x="860" y="275" class="text-small" text-anchor="middle"></text>
 
   <!-- Context Construction -->
   <rect x="960" y="320" width="200" height="70" class="component" rx="5"/>
